@@ -1,0 +1,4 @@
+dmypy-ls
+aiogram
+python-dotenv
+aiogram_sqlite_storage
