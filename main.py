@@ -18,9 +18,10 @@ async def main():
     dp.message.middleware(CooldownMiddleware(1))
     dp.callback_query.middleware(CooldownMiddleware(10))
 
-    try:
-        await dp.start_polling(bot)
-    except KeyboardInterrupt:
-        pass
+    await dp.start_polling(bot)
 
-asyncio.run(main())
+
+try:
+    asyncio.run(main())
+except KeyboardInterrupt:
+    pass
