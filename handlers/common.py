@@ -16,7 +16,7 @@ async def cmd_start(message: Message, state: FSMContext, command: CommandObject)
         await state.set_data({})
     
     match command.args:
-        case []:
+        case None:
             pass
         
         case _:
@@ -27,4 +27,4 @@ async def cmd_start(message: Message, state: FSMContext, command: CommandObject)
 
 @rt.message()
 async def msg_echo(message: Message):
-    await message.forward(message.chat.id, protect_content=True)
+    await message.forward(message.chat.id)
