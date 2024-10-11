@@ -1,41 +1,52 @@
 from collections import defaultdict
-from typing import Any
 import logging
+
+
+# INFO WARN WARNING
+FORMAT = '{asctime} - [{levelname}] {filename}:{lineno} {name} - {message}'
+LOG_FILE = "log.log"
+LEVEL = logging.INFO
 
 
 class CooldownFilter(logging.Filter):
     """Do not print same line if time after previous line less or equal <COOLDOWN> seconds. Defaults to 5 seconds"""
-    def __init__(self, name='', cooldown=5):
+    def __init__(self, cooldown=5):
         """
         Initialize a filter.
 
-        Initialize with the name of the logger which, together with its
-        children, will have its events allowed through the filter. If no
-        name is specified, allow every event.
+        Do not print same line if time after previous line less or equal <COOLDOWN> seconds. Defaults to 5 seconds
         """
-        self.name = name
-        self.nlen = len(name)
         self.cooldown = cooldown
     
-    last_events: dict[Any, float] = defaultdict(float)
+    last_events: dict[str, float] = defaultdict(float)
     
-    def filter(self, record):
-        prev_time = self.last_events[record.lineno]
+    def filter(self, record) -> bool:
+        prev_time = self.last_events[record.name]
         if prev_time + self.cooldown <= record.created:
-            self.last_events[record.lineno] = record.created
+            self.last_events[record.name] = record.created
             return True
         else:
             return False
 
+stream_handler = logging.StreamHandler()
+file_handler = logging.FileHandler(LOG_FILE, encoding='utf-8')
+logging.basicConfig(format=FORMAT, level=LEVEL, handlers=[stream_handler, file_handler], style="{")
 
-LOGGING_COOLDOWN = 3
-FORMAT = '{asctime} - [{levelname}] {funcName}:{lineno} {name} - {message}'
-LEVEL = logging.INFO
+stream_handler.setLevel(LEVEL)
+file_handler.setLevel(logging.DEBUG)
 
+logger = logging.getLogger(__name__)
 
-streamHandler = logging.StreamHandler()
-streamHandler.addFilter(CooldownFilter())
+MUTEDICT = {
+    "httpx": logging.WARNING, 
+    "asyncio": logging.ERROR, 
+    "pyrogram.session.session": logging.WARNING, 
+    "pyrogram.dispatcher": logging.WARNING, 
+    "pyrogram.connection.transport.tcp.tcp": logging.WARNING, 
+    "pyrogram.connection.connection": logging.WARNING
+}
 
-logging.basicConfig(format=FORMAT, level=LEVEL, style="{", handlers=[streamHandler])
-logging.getLogger("aiogram").setLevel(logging.WARNING)
-logging.getLogger("aiohttp").setLevel(logging.WARNING)
+for _name, _value in MUTEDICT.items():
+    _l = logging.getLogger(_name)
+    _l.setLevel(_value)
+    _l.addFilter(CooldownFilter())
