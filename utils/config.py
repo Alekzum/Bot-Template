@@ -2,8 +2,8 @@ import dotenv
 
 
 def get_token() -> str:
-    maybe_token: str | None = dotenv.get_key(".env", "TOKEN")
-    if maybe_token is not None and maybe_token:
+    maybe_token: str | None = dotenv.get_key(".env", "BOT_TOKEN")
+    if maybe_token is not None and maybe_token.strip():
         return maybe_token
     
     temp_token = input("Need bot's token (https://botfather.t.me): ")
