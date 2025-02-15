@@ -7,7 +7,7 @@ def get_token() -> str:
         return maybe_token
     
     temp_token = input("Need bot's token (https://botfather.t.me): ")
-    dotenv.set_key(".env", "TOKEN", temp_token)
+    dotenv.set_key(".env", "BOT_TOKEN", temp_token)
     return temp_token or get_token()
 
 
@@ -15,5 +15,3 @@ path = dotenv.find_dotenv()
 if path == "":
     with open(".env", "w") as f:
         pass
-
-TOKEN: str = get_token()
