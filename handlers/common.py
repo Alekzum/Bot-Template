@@ -22,9 +22,9 @@ async def cmd_start(message: Message, state: FSMContext, command: CommandObject)
         case _:
             logger.info(f"Start is {command}")
 
-    await message.answer(f"Hello! I am an echo bot! I just forward your messages to you.")
+    await message.answer(f"Hello! I am an echo bot and just copying your messages to you.")
 
 
 @rt.message()
 async def msg_echo(message: Message):
-    await message.forward(message.chat.id)
+    await message.copy_to(message.chat.id)
