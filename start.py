@@ -14,7 +14,6 @@ def main():
         process.wait()
     except KeyboardInterrupt:
         pass
-    ...
 
 
 if __name__ == "__main__":
