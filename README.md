@@ -3,6 +3,8 @@ This is just a template for future bots on Python with `aiogram`
 
 There is also [variant with aiogram-dialog](https://github.com/Alekzum/Bot-Template/tree/dialog)
 
+There is also [variant without aiogram-dialog](https://github.com/Alekzum/Bot-Template/tree/dialog)
+
 ## Setup
 1. Clone repository
 2. Make your bot (aka "add your scripts in handlers, file common.py as example")
