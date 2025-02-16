@@ -30,7 +30,8 @@ class CooldownFilter(logging.Filter):
 
 stream_handler = logging.StreamHandler()
 file_handler = logging.FileHandler(LOG_FILE, encoding='utf-8')
-logging.basicConfig(format=FORMAT, level=LEVEL, handlers=[stream_handler, file_handler], style="{")
+tempfile_handler = logging.FileHandler(f"temp{LOG_FILE}", encoding='utf-8', mode="w")
+logging.basicConfig(format=FORMAT, level=LEVEL, handlers=[stream_handler, file_handler, tempfile_handler], style="{")
 
 stream_handler.setLevel(LEVEL)
 file_handler.setLevel(logging.DEBUG)
