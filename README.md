@@ -1,5 +1,5 @@
 ## Description
-This is just a template for future bots on Python with `aiogram`
+This is just a template for future bots on Python with `aiogram` and `aiogram-dialog`
 
 ## Setup
 1. Clone repository
