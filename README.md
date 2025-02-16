@@ -1,5 +1,7 @@
 ## Description
-This is just a template for future bots on Python with `aiogram` and `aiogram-dialog`
+This is just a template for future bots on Python with `aiogram`
+
+There is also [variant with aiogram-dialog](https://github.com/Alekzum/Bot-Template/tree/dialog)
 
 ## Setup
 1. Clone repository
