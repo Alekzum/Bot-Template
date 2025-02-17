@@ -9,6 +9,7 @@ from aiogram.fsm.state import State
 from typing import Any, Dict, Optional
 
 import aiosqlite
+import pathlib
 import sqlite3
 import pickle
 import json
@@ -48,6 +49,10 @@ class AioSQLStorage(BaseStorage):
             self._ser_m = "pickle"
 
     def _init_db(self, db_path):
+        dp_p = pathlib.Path(db_path)
+        for p in dp_p.parents:
+            if not p.exists() and not p.is_file():
+                p.mkdir()
         with sqlite3.connect(db_path) as con:
             con.execute(
                 "CREATE TABLE IF NOT EXISTS fsm_data (key TEXT PRIMARY KEY, state TEXT, data TEXT)"
