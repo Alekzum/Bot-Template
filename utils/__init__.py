@@ -1,5 +1,5 @@
-from . import runtime_platform
 from . import my_logger
+from . import runtime_platform
 from . import config
 from . import my_aiosqlitestore
 from . import my_middlewares
