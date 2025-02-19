@@ -16,16 +16,6 @@ logger = logging.getLogger(__name__)
 rt = Router()
 
 
-async def common_states_echo_getter(dialog_manager: DialogManager):
-    echo_first_message = "It's not your first message"
-
-    echo_first_message = dialog_manager.dialog_data.get("echo_first_message", True)
-    if echo_first_message:
-        dialog_manager.dialog_data["echo_first_message"] = False
-
-    return dict(echo_first_message=echo_first_message)
-
-
 async def echo_actions(msg: Message, _, dialog_manager: DialogManager):
     dialog_manager.show_mode = ShowMode.EDIT
     await msg.copy_to(msg.chat.id)
