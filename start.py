@@ -5,7 +5,10 @@ import sys
 
 def main():
     if not in_venv():
-        returncode = start_venv()
+        try:
+            returncode = start_venv()
+        except KeyboardInterrupt:
+            return
         exit(returncode)
 
     # in theory we are in venv
