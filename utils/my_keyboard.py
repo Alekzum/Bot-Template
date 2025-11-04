@@ -1,10 +1,5 @@
-from aiogram.types import (
-    InlineKeyboardButton,
-    InlineKeyboardMarkup,
-    SwitchInlineQueryChosenChat,
-)
-from aiogram.utils import keyboard
-from typing import Sequence, Literal, Callable
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from typing import Literal
 
 
 INPUT_KEYS = Literal[

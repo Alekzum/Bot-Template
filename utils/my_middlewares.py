@@ -1,6 +1,7 @@
-from typing import Callable, Dict, Any, Awaitable, Union, TypedDict, override
+from typing import Callable, Dict, Any, Awaitable, TypedDict, override, Optional
 from aiogram import BaseMiddleware
-from aiogram.types import Message, CallbackQuery
+from aiogram.types import CallbackQuery, TelegramObject, User, Chat
+from math import floor
 import time
 
 
@@ -50,18 +51,18 @@ class CooldownMiddleware(BaseMiddleware):
     @override
     async def __call__(
         self,
-        handler: Callable[
-            [Union[Message, CallbackQuery], Dict[str, Any]], Awaitable[Any]
-        ],
-        event: Union[Message, CallbackQuery],  # type: ignore[override]
+        handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
+        event: TelegramObject,
         data: Dict[str, Any],
     ) -> Any:
-        if event.from_user is not None:
-            uid = event.from_user.id  # type: ignore[union-attr]
-            language_code = event.from_user.language_code or "en"
+        from_user: Optional[User] = getattr(event, "from_user", None)
+        sender_chat: Optional[Chat] = getattr(event, "sender_chat", None)
+        if from_user is not None:
+            uid = from_user.id  # type: ignore[union-attr]
+            language_code = from_user.language_code or "en"
 
-        elif event.sender_chat is not None:
-            uid = event.sender_chat.id
+        elif sender_chat is not None:
+            uid = sender_chat.id
             language_code = "en"
 
         else:
@@ -75,16 +76,15 @@ class CooldownMiddleware(BaseMiddleware):
         is_too_fast = delta_time < self.cooldown
 
         if isinstance(event, CallbackQuery) and is_too_fast:
-            too_fast_message_raw = translation_table["error_too_fast"]
-            unit_string = translation_table["seconds_to_str"]
+            fast_msg_template = translation_table["error_too_fast"]
+            unit_strings = translation_table["seconds_to_str"]
 
             remain_time = self.cooldown - delta_time
-            remains_int: int = int(remain_time)
-            remains_last_d = remains_int % 10
+            remain_last_d = floor(remain_time) % 10
 
-            too_fast_message = too_fast_message_raw.format(
+            too_fast_message = fast_msg_template.format(
                 remain_time=remain_time,
-                unit_string=unit_string.get(remains_last_d, unit_string["default"]),
+                unit_string=unit_strings.get(remain_last_d, unit_strings["default"]),
             )
             await event.answer(too_fast_message)
             return
