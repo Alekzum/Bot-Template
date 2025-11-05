@@ -1,4 +1,3 @@
-from . import runtime_platform
 from . import my_logging
 from . import config
 from . import my_aiosqlitestore
@@ -11,7 +10,6 @@ from . import my_wraps
 
 
 __all__ = [
-    "runtime_platform",
     "my_logging",
     "config",
     "my_aiosqlitestore",
